@@ -3,24 +3,18 @@
 ## Catálogo de MCPs ofensivos
 
 ### Existentes / públicos
+- **Burp Suite MCP Server (oficial PortSwigger)** — extensión BApp que expone Repeater, scanner, tráfico interceptado y otras funciones de Burp a través de MCP. Autoría: Daniel S y Daniel Allen (PortSwigger).
+  - BApp Store: https://portswigger.net/bappstore/9952290f04ed4f628e624d0aa9dccebc
+  - Repo: https://github.com/portswigger/mcp-server
+  - Instalación: BApp Store dentro de Burp → activar la pestaña MCP → usar el botón installer para auto-configurar Claude Desktop, o configurar el cliente MCP manualmente.
 - **anthropic-fetch / brave-search MCP** — recon pasivo, OSINT.
 - **github MCP** — secret hunting en repos.
 - **shodan MCP** — host intelligence (depende de plan).
 
 ### A crear (alta prioridad)
 
-#### `burp-mcp`
-Capacidades:
-- `send_to_repeater(request)`
-- `run_active_scan(url)`
-- `extract_jwt(request)`
-- `analyze_cors(url)`
-- `detect_idor(requests[])`
-- `diff_responses(req_a, req_b)`
-- `replay_requests(history_filter)`
-- `generate_payloads(context)`
-
-Implementación: Node.js MCP server que habla con Burp REST API (Burp Pro).
+#### `burp-mcp` ya existe oficial → ver sección "Existentes / públicos" arriba
+PortSwigger publicó el MCP Server oficial. Ya no es un MCP "a crear" — usar el oficial.
 
 #### `nuclei-mcp`
 - `run_templates(target, severity, tags)`

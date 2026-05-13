@@ -258,11 +258,18 @@ open presentation.pptx
 
 ## MCPs
 
-Recommended catalog in `references/mcp.md`:
+Recommended catalog in `references/mcp.md`.
+
+**Existing / official:**
 
 | MCP | Purpose |
 |-----|---------|
-| `burp-mcp` | Burp REST API integration |
+| **[Burp Suite MCP Server](https://portswigger.net/bappstore/9952290f04ed4f628e624d0aa9dccebc)** (official PortSwigger) | Exposes Repeater, scanner, intercepted traffic and other Burp features to AI clients. Repo: [github.com/portswigger/mcp-server](https://github.com/portswigger/mcp-server) |
+
+**Suggested blueprints to build** (the skill documents their capability surface; not yet published MCPs):
+
+| MCP | Purpose |
+|-----|---------|
 | `nuclei-mcp` | Templates + finding correlation |
 | `sqli-mcp` | SQLi detect + WAF evasion |
 | `xss-mcp` | Payload mutation + CSP bypass gen |

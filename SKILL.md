@@ -30,6 +30,27 @@ Espera respuesta. Confirma la elección, marca las fases que aplican y **persist
 
 Detalle de cada metodología y mapping de fases en `references/methodologies.md`.
 
+### Lectura profunda + aplicación al engagement
+
+Cada metodología tiene un archivo extendido en `references/methodologies/` con su origen, fases, controles y cómo aplicarla al engagement actual. Se accede con el script `scripts/methodology.py`:
+
+```bash
+# Listar todas
+python3 scripts/methodology.py list
+
+# Ver una completa (ptes | owasp-wstg | nist-800-115 | osstmm | mitre-attack | cwe-capec)
+python3 scripts/methodology.py show owasp-wstg
+
+# Ver + cómo aplicarla a este engagement (genera plan concreto al final)
+python3 scripts/methodology.py apply ptes --target https://api.x.cl --type api
+
+# Plan híbrido combinando varias
+python3 scripts/methodology.py hybrid owasp-wstg mitre-attack cwe-capec \
+        --target https://x.cl --type web
+```
+
+Cuando el usuario diga *"léeme la metodología X"* o *"cómo aplico WSTG a este pentest"*, usa este script en lugar de citar `references/methodologies.md` (que es solo índice resumido).
+
 ---
 
 ## 1. Datos mínimos antes de empezar

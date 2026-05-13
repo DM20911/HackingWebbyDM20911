@@ -386,9 +386,16 @@ Genera: portada, slide de resumen ejecutivo, matriz por severidad, slide por hal
 
 Catálogo recomendado en `references/mcp.md`. Resumen:
 
+**Existentes / oficiales:**
+
 | MCP | Para qué |
 |-----|----------|
-| `burp-mcp` | Integración con Burp REST API |
+| **[Burp Suite MCP Server](https://portswigger.net/bappstore/9952290f04ed4f628e624d0aa9dccebc)** (oficial PortSwigger) | Expone Repeater, scanner, tráfico interceptado y demás funciones de Burp a clientes IA. Repo: [github.com/portswigger/mcp-server](https://github.com/portswigger/mcp-server) |
+
+**Blueprints sugeridos para construir** (la skill documenta su superficie de capacidades; aún no son MCPs publicados):
+
+| MCP | Para qué |
+|-----|----------|
 | `nuclei-mcp` | Templates + correlación de findings |
 | `sqli-mcp` | SQLi detect + WAF evasion |
 | `xss-mcp` | Payload mutation + CSP bypass gen |
