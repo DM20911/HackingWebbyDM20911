@@ -10,6 +10,12 @@
 
 Skill de Claude Code / Claude Desktop para profesionales de pentesting web ofensivo. Empaqueta la metodología, las herramientas, los MCPs recomendados y un generador de informes propio (Markdown, Word, PDF, HTML, PowerPoint, JSON, SARIF).
 
+## ⚡ Instalación rápida
+
+```bash
+npx skills add DM20911/HackingWebbyDM20911
+```
+
 ---
 
 ## Índice

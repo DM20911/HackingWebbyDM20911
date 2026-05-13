@@ -10,6 +10,12 @@
 
 オフェンシブ Web ペネトレーションテスト専門家のための Claude Code / Claude Desktop スキル。方法論、ツール、推奨 MCP、独自のマルチフォーマット レポート ジェネレーター（Markdown、Word、PDF、HTML、PowerPoint、JSON、SARIF）をパッケージ化しています。
 
+## ⚡ クイックインストール
+
+```bash
+npx skills add DM20911/HackingWebbyDM20911
+```
+
 ---
 
 ## 機能
