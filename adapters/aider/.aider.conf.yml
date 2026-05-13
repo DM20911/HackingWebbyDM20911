@@ -1,0 +1,13 @@
+# HackingWebbyDM20911 — Aider config
+# Usage: place this file in the project root and run `aider`.
+
+read:
+  - CONVENTIONS.md
+
+# auto-commits off so the pentester stays in control of their evidence repo
+auto-commits: false
+dirty-commits: false
+
+# nice-to-haves
+pretty: true
+stream: true

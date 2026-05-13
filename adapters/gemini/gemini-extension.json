@@ -1,0 +1,9 @@
+{
+  "name": "HackingWebbyDM20911",
+  "version": "1.2.0",
+  "description": "Offensive Web Hacking copilot — recon, exploitation, AI-assisted correlation, attack chaining and senior multi-format reporting.",
+  "contextFileName": "GEMINI.md",
+  "homepage": "https://github.com/DM20911/HackingWebbyDM20911",
+  "license": "Authorized internal use",
+  "author": "dm20911"
+}

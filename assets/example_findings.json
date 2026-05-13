@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "titulo": "Informe de Auditoría de Seguridad — Demo",
+    "cliente": "Cliente Demo S.A.",
+    "tipo": "Pentest Web + API",
+    "fecha": "2026-05-12",
+    "clasificacion": "Confidencial",
+    "version": "1.0",
+    "autor": "dm20911"
+  },
+  "introduccion": "El presente informe documenta las actividades de evaluación de seguridad realizadas sobre la aplicación web y API expuestas en https://demo.target.cl, con el objetivo de identificar vulnerabilidades explotables que puedan comprometer la confidencialidad, integridad y disponibilidad de la información.",
+  "resumen_ejecutivo": "La evaluación identificó dos vulnerabilidades críticas, una alta y una media, con riesgo agregado Alto. Los hallazgos principales permiten compromiso completo de cuentas y exfiltración masiva de datos sin autenticación.",
+  "alcance": "Aplicación web https://demo.target.cl y API https://api.demo.target.cl. Excluido: subdominios de marketing, infraestructura de terceros (CDN), pruebas DoS.",
+  "metodologia": "OWASP WSTG v4.2 + PTES + MITRE ATT&CK + CWE/CAPEC para clasificación.",
+  "findings": [
+    {
+      "titulo": "BOLA en endpoint de cuentas",
+      "severidad": "Crítica",
+      "cvss31_score": 9.1,
+      "cvss31_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+      "cvss40_score": 8.7,
+      "cvss40_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N",
+      "cwe": "CWE-639 — Authorization Bypass Through User-Controlled Key",
+      "capec": "CAPEC-39",
+      "owasp": "API1:2023 — Broken Object Level Authorization",
+      "attack": "T1190",
+      "activo": "https://api.demo.target.cl/v1/cuentas/{id}",
+      "parametro": "path id",
+      "descripcion": "El endpoint no valida la propiedad del recurso solicitado. Un usuario autenticado puede acceder a la cuenta de cualquier otro usuario reemplazando el identificador en la URL.",
+      "impacto": "Un atacante con cuenta válida podría enumerar y leer datos sensibles (titular, saldo, transacciones) de todos los usuarios del sistema.",
+      "riesgo_negocio": "Compromiso completo de la confidencialidad financiera de los clientes con potencial sanción regulatoria.",
+      "confidence": "High",
+      "validacion_manual": "Sí",
+      "probabilidad": "Alta",
+      "evidencia": "Se confirmó con dos cuentas independientes A y B. Token de A obtiene 200 OK con datos de B.",
+      "poc": [
+        {
+          "descripcion": "Se solicita la cuenta del usuario B usando el token del usuario A. El backend debe rechazar con 403, pero retorna HTTP 200 con el titular y saldo reales, confirmando BOLA.",
+          "cmd": "curl -s -H 'Authorization: Bearer TOKEN_A' https://api.demo.target.cl/v1/cuentas/67890",
+          "output": "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\"cuenta\":\"67890\",\"titular\":\"Maria Gonzalez\",\"saldo\":3200000}"
+        }
+      ],
+      "remediacion": "Validar en backend que el id solicitado corresponde al usuario del token. Implementar middleware de autorización a nivel de objeto. Agregar tests automatizados de BOLA en CI.",
+      "referencias": [
+        "https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/",
+        "https://cwe.mitre.org/data/definitions/639.html"
+      ],
+      "estado": "Confirmado"
+    },
+    {
+      "titulo": "JWT con secret HS256 débil",
+      "severidad": "Alta",
+      "cvss31_score": 8.1,
+      "cvss31_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvss40_score": 7.7,
+      "cvss40_vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N",
+      "cwe": "CWE-798 — Use of Hard-coded Credentials",
+      "owasp": "A02:2021 — Cryptographic Failures",
+      "activo": "https://api.demo.target.cl/v1/auth/login",
+      "parametro": "JWT signature key",
+      "descripcion": "El JWT se firma con HMAC-SHA256 utilizando una clave de baja entropía recuperable mediante diccionario en menos de 60 segundos.",
+      "impacto": "Un atacante podría forjar tokens válidos para cualquier usuario, incluido administrador, comprometiendo completamente la autenticación.",
+      "confidence": "High",
+      "validacion_manual": "Sí",
+      "probabilidad": "Media",
+      "poc": [
+        {
+          "descripcion": "Se ejecuta jwt_tool con diccionario rockyou.txt. La clave se rompe en menos de un minuto, demostrando entropía insuficiente.",
+          "cmd": "jwt_tool eyJhbGciOi... -C -d rockyou.txt",
+          "output": "[+] Secret found: secret123"
+        }
+      ],
+      "remediacion": "Reemplazar HS256 por RS256 con clave RSA 2048+. Si HS256 es obligatorio, usar clave aleatoria de 256 bits desde KMS.",
+      "referencias": [
+        "https://datatracker.ietf.org/doc/html/rfc7519",
+        "https://cwe.mitre.org/data/definitions/798.html"
+      ],
+      "estado": "Confirmado"
+    }
+  ],
+  "attack_chains": [
+    {
+      "nombre": "Chain 1 — Forge JWT admin → masivo BOLA",
+      "componentes": ["JWT débil", "BOLA"],
+      "cvss_agregado": "9.8",
+      "descripcion": "Atacante anónimo crackea el secret JWT, forja token con role=admin y enumera todas las cuentas vía BOLA, exfiltrando la base de clientes completa."
+    }
+  ],
+  "timeline": [
+    "2026-05-08 Reconocimiento pasivo",
+    "2026-05-09 Enumeración activa, fingerprinting",
+    "2026-05-10 Explotación BOLA, JWT cracking",
+    "2026-05-11 Validación y chaining",
+    "2026-05-12 Reporting"
+  ],
+  "limitaciones": "No se realizaron pruebas de DoS/DDoS por restricciones del cliente. Pruebas exclusivamente en ambiente QA.",
+  "conclusion": "La evaluación realizada identificó una cadena explotable que permite compromiso completo de cuentas de la plataforma. Se recomienda priorizar la remediación de los hallazgos críticos antes de cualquier release adicional a producción.",
+  "anexos": {
+    "Herramientas utilizadas": "Burp Suite Pro 2026.1, ffuf 2.1, sqlmap 1.8, jwt_tool 2.2, nuclei 3.2",
+    "Wordlists": "SecLists raft-medium-directories, rockyou.txt, assetnote api-endpoints"
+  }
+}
